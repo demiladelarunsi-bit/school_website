@@ -83,7 +83,15 @@ def teacher_logout(request):
 @login_required
 def teacher_dashboard(request):
     results = Result.objects.all().order_by('-created_at')
-    return render(request, 'dashboard.html', {'results': results})
+    total_results = Result.objects.count()
+    total_students = Result.objects.values('exam_number').distinct().count()
+    avg_score = Result.objects.aggregate(avg=Avg('average_mark'))['avg'] or 0
+    return render(request, 'dashboard.html', {
+        'results': results,
+        'total_results': total_results,
+        'total_students': total_students,
+        'avg_score': round(avg_score, 2)
+    })
 
 @login_required
 def delete_result(request, pk):
