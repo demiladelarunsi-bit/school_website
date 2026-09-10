@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %}Upload Result{% endblock %}
+
+{% block styles %}
+<style>
+    .upload-wrap { max-width: 900px; margin: 0 auto; padding: 100px 2rem 4rem; }
+    .upload-header { text-align: center; margin-bottom: 2.5rem; animation: slideDown 0.7s ease both; }
+    .upload-header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #fff, #ff5fa8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+    .upload-header p { color: #a0a0c0; }
+    .upload-card { background: rgba(20, 20, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 2.5rem; animation: cardIn 0.7s ease 0.2s both; }
+    .section-label { font-family: 'Space Grotesk', sans-serif; color: #ff5fa8; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin: 1.8rem 0 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .section-label::before { content: ''; width: 30px; height: 2px; background: linear-gradient(135deg, #ff5fa8, #a855f7); border-radius: 2px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-field { display: flex; flex-direction: column; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label { color: #c8c8e0; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .form-field input, .form-field select, .form-field textarea { padding: 0.85rem 1rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; font-size: 0.95rem; font-family: 'Inter', sans-serif; transition: all 0.3s ease; }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { outline: none; border-color: #ff5fa8; background: rgba(255, 95, 168, 0.05); box-shadow: 0 0 0 4px rgba(255, 95, 168, 0.12); }
+    .form-field select option { background: #1a1a3a; color: #fff; }
+    
+    .spreadsheet-wrap { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; max-height: 500px; overflow-y: auto; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table thead { position: sticky; top: 0; z-index: 10; }
+    .data-table thead th { text-align: center; padding: 0.8rem 1rem; color: #c8c8e0; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(255, 255, 255, 0.06); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .data-table thead th:first-child { text-align: left; }
+    .data-table tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.04); animation: rowIn 0.4s ease both; }
+    .data-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+    .data-table td { padding: 0.4rem 1rem; vertical-align: middle; color: #e8e8f0; font-size: 0.9rem; font-weight: 500; }
+    .data-table td.subject-name { text-align: left; }
+    .table-input { width: 80px; padding: 0.5rem 0.8rem; background: rgba(20, 20, 50, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; text-align: center; font-family: 'Inter', sans-serif; transition: all 0.2s ease; }
+    .table-input:focus { outline: none; border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15); }
+    .total-display { width: 80px; text-align: center; font-weight: 700; color: #4ade80; }
+    
+    .submit-row { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; }
+    .btn { padding: 0.9rem 2rem; border-radius: 100px; font-weight: 600; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+    .btn-primary { background: linear-gradient(135deg, #ff5fa8, #a855f7); color: #fff; box-shadow: 0 8px 25px rgba(255, 95, 168, 0.35); }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 35px rgba(255, 95, 168, 0.5); }
+    .btn-ghost { background: rgba(255, 255, 255, 0.06); color: #fff; border: 1px solid rgba(255, 255, 255, 0.12); }
+    .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes rowIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .spreadsheet-wrap { overflow-x: auto; } .data-table { min-width: 500px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-wrap">
+    <div class="upload-header">
+        <h1>Upload Student Result</h1>
+        <p>Enter CA (out of 40) and Exam (out of 60). The total will auto-calculate to 100.</p>
+    </div>
+    <form method="post" class="upload-card">
+        {% csrf_token %}
+        <div class="section-label">Student Information</div>
+        <div class="form-grid">
+            <div class="form-field"><label>Exam Number</label>{{ form.exam_number }}</div>
+            <div class="form-field"><label>Student Name</label>{{ form.student_name }}</div>
+            <div class="form-field"><label>Category</label>{{ form.category }}</div>
+            <div class="form-field"><label>Class Name</label>{{ form.class_name }}</div>
+            <div class="form-field"><label>Year</label>{{ form.year }}</div>
+            <div class="form-field"><label>Term</label>{{ form.term }}</div>
+            <div class="form-field full"><label>Remarks</label>{{ form.remarks }}</div>
+        </div>
+
+        <div class="section-label">Subject Scores</div>
+        <div class="spreadsheet-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Subject Name</th>
+                        <th>CA (/40)</th>
+                        <th>Exam (/60)</th>
+                        <th>Total (/100)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <td class="subject-name">
+                            {{ subject }}
+                            <input type="hidden" name="subject_name[]" value="{{ subject }}">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="number" name="subject_ca[]" min="0" max="40" step="0.1" class="table-input ca-input" placeholder="0" oninput="calculateTotal(this)">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="number" name="subject_exam[]" min="0" max="60" step="0.1" class="table-input exam-input" placeholder="0" oninput="calculateTotal(this)">
+                        </td>
+                        <td class="total-display">0</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="submit-row">
+            <a href="{% url 'teacher_dashboard' %}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Publish Result ✓</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function calculateTotal(input) {
+    const row = input.closest('tr');
+    const caInput = row.querySelector('.ca-input');
+    const examInput = row.querySelector('.exam-input');
+    const totalDisplay = row.querySelector('.total-display');
+    
+    let ca = parseFloat(caInput.value) || 0;
+    let exam = parseFloat(examInput.value) || 0;
+    
+    if (ca > 40) { caInput.value = 40; ca = 40; }
+    if (exam > 60) { examInput.value = 60; exam = 60; }
+    
+    let total = ca + exam;
+    totalDisplay.textContent = total.toFixed(1);
+}
+</script>
+{% endblock %}
