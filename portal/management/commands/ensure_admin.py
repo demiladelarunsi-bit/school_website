@@ -9,12 +9,16 @@ class Command(BaseCommand):
         username = 'admin'
         password = 'grandbrook123'
 
-        if not User.objects.filter(username=username).exists():
-            User.objects.create_superuser(
-                username=username,
-                password=password,
-                email='admin@grandbrook.com'
-            )
+        # Get the user if it exists, or create it if it doesn't
+        user, created = User.objects.get_or_create(username=username)
+        
+        # ALWAYS set the password to make sure it's correct
+        user.set_password(password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        
+        if created:
             self.stdout.write(self.style.SUCCESS('Superuser created successfully!'))
         else:
-            self.stdout.write('Superuser already exists.')
+            self.stdout.write(self.style.SUCCESS('Superuser password updated successfully!'))
