@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -146,3 +147,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+import dj_database_url
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {'default': dj_database_url.parse(os.environ['DATABASE_URL'])}
