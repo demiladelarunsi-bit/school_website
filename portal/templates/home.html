@@ -3,87 +3,157 @@
 
 {% block styles %}
 <style>
-    .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 100px 2rem 2rem; position: relative; }
+    /* Hero Section */
+    .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 2rem 60px; position: relative; }
     .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 100px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); font-size: 0.85rem; color: #c8c8e0; margin-bottom: 1.5rem; backdrop-filter: blur(20px); animation: fadeUp 0.8s ease both; }
-    .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1; letter-spacing: -0.04em; margin-bottom: 1rem; animation: fadeUp 1s ease 0.2s both; }
+    .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.2rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 1.5rem; animation: fadeUp 1s ease 0.2s both; max-width: 900px; }
     .hero h1 .word { display: inline-block; background: linear-gradient(135deg, #fff 30%, #ff5fa8 70%, #a855f7 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 200%; animation: shine 4s ease-in-out infinite; }
-    .hero p { max-width: 620px; color: #a0a0c0; font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; animation: fadeUp 1s ease 0.4s both; }
+    .hero p { max-width: 650px; color: #a0a0c0; font-size: 1.1rem; line-height: 1.6; margin-bottom: 2.5rem; animation: fadeUp 1s ease 0.4s both; }
     .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: fadeUp 1s ease 0.6s both; }
     .btn { padding: 0.9rem 2rem; border-radius: 100px; font-weight: 600; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
     .btn-primary { background: linear-gradient(135deg, #ff5fa8, #a855f7); color: #fff; box-shadow: 0 8px 30px rgba(255, 95, 168, 0.4); }
     .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 40px rgba(255, 95, 168, 0.55); }
     .btn-secondary { background: rgba(255, 255, 255, 0.06); color: #fff; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); }
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-3px) scale(1.02); }
-    
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-bottom: 3rem; }
-    .stat-card { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 1.5rem; text-align: center; transition: all 0.4s ease; animation: fadeUp 0.8s ease both; }
-    .stat-card:hover { transform: translateY(-5px); border-color: rgba(255, 95, 168, 0.3); }
-    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #fff, #ff5fa8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 0.5rem; }
-    .stat-label { color: #a0a0c0; font-size: 0.85rem; font-weight: 500; }
 
-    .packed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem; }
-    .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 2rem; transition: all 0.4s ease; }
+    /* Sections */
+    .container { max-width: 1200px; margin: 0 auto; padding: 80px 2rem; }
+    .section-title { text-align: center; margin-bottom: 60px; animation: fadeUp 0.8s ease both; }
+    .section-title h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; background: linear-gradient(135deg, #fff, #a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+    .section-title p { color: #a0a0c0; max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+    /* About & Principal */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 80px; }
+    .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 2rem; transition: all 0.4s ease; animation: fadeUp 0.8s ease both; }
     .glass-card:hover { border-color: rgba(168, 85, 247, 0.3); }
-    .glass-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; margin-bottom: 1rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
-    .glass-card p { color: #a0a0c0; font-size: 0.9rem; margin-bottom: 1rem; }
-    .pill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .pill { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; color: #c8c8e0; }
+    .glass-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; margin-bottom: 1rem; color: #fff; }
+    .glass-card p { color: #a0a0c0; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+    .principal-card { text-align: center; }
+    .principal-img { width: 120px; height: 120px; background: linear-gradient(135deg, #ff5fa8, #a855f7); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4); }
 
-    .footer { text-align: center; padding: 2rem; color: #606080; font-size: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+    /* Academics */
+    .academics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 80px; }
+    .academic-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 2.5rem; transition: all 0.4s ease; }
+    .academic-card:hover { transform: translateY(-8px); border-color: rgba(255, 95, 168, 0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .academic-card .icon { width: 60px; height: 60px; border-radius: 15px; background: linear-gradient(135deg, #ff5fa8, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 1.5rem; }
+    .academic-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 1rem; color: #fff; }
+    .academic-card p { color: #a0a0c0; margin-bottom: 1.5rem; line-height: 1.6; }
+    .subject-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .subject-pill { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; color: #c8c8e0; }
+
+    /* Values */
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 80px; }
+    .value-card { text-align: center; padding: 2rem; }
+    .value-icon { width: 70px; height: 70px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 1.8rem; color: #d4af37; }
+    .value-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff; }
+    .value-card p { color: #a0a0c0; font-size: 0.9rem; line-height: 1.6; }
+
+    /* CTA Section */
+    .cta-section { text-align: center; padding: 60px 2rem; background: linear-gradient(135deg, rgba(255, 95, 168, 0.1), rgba(168, 85, 247, 0.1)); border-radius: 30px; margin: 0 2rem 80px; border: 1px solid rgba(255,255,255,0.1); }
+    .cta-section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1rem; color: #fff; }
+    .cta-section p { color: #c8c8e0; margin-bottom: 2rem; }
+
+    .footer { text-align: center; padding: 3rem 2rem; color: #606080; font-size: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+    
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes shine { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    @media (max-width: 768px) {
+        .about-grid, .academics-grid { grid-template-columns: 1fr; gap: 20px; }
+        .container { padding: 60px 1.5rem; }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- Hero -->
 <section class="hero">
     <div class="hero-badge">📍 Lagos, Nigeria · Est. 1998</div>
-    <h1><span class="word">Grandbrook</span> <span class="word">Secondary</span> <span class="word">School</span></h1>
-    <p>Knowledge · Integrity · Excellence. Access our digital portal to check WAEC/NECO style results or upload student grades.</p>
+    <h1>Welcome to <span class="word">Grandbrook</span> Secondary School</h1>
+    <p>Knowledge · Integrity · Excellence. We provide a world-class education that nurtures minds, builds character, and shapes the leaders of tomorrow.</p>
     <div class="hero-cta">
         <a href="{% url 'student_check' %}" class="btn btn-primary">Check Student Result →</a>
         <a href="{% url 'teacher_login' %}" class="btn btn-secondary">Teacher Portal</a>
     </div>
 </section>
 
+<!-- About / Principal -->
 <div class="container">
-    <div class="stats-grid">
-        <div class="stat-card"><div class="stat-value">{{ total_students }}</div><div class="stat-label">Students Registered</div></div>
-        <div class="stat-card"><div class="stat-value">{{ total_results }}</div><div class="stat-label">Results Published</div></div>
-        <div class="stat-card"><div class="stat-value">{{ total_subjects }}</div><div class="stat-label">Subject Entries</div></div>
-        <div class="stat-card"><div class="stat-value">{{ avg_score }}</div><div class="stat-label">School Average</div></div>
-    </div>
-
-    <div class="packed-grid">
+    <div class="about-grid">
         <div class="glass-card">
-            <h3>🏫 Junior Secondary (JSS 1 - 3)</h3>
-            <p>Building a strong foundation with a comprehensive curriculum designed to spark curiosity and critical thinking.</p>
-            <div class="pill-list">
-                <span class="pill">Basic Science</span><span class="pill">Civic Education</span>
-                <span class="pill">Social Studies</span><span class="pill">Business Studies</span>
-                <span class="pill">Computer Studies</span><span class="pill">Fine Arts</span>
-            </div>
+            <h3>About Our Institution</h3>
+            <p>Grandbrook Secondary School has been a beacon of academic excellence for over two decades. We offer a comprehensive curriculum that balances rigorous academics with moral discipline and extracurricular achievement.</p>
+            <p>Our state-of-the-art facilities and highly qualified educators ensure that every student is equipped to excel in WAEC, NECO, and global university admissions.</p>
         </div>
-        <div class="glass-card">
-            <h3>🎓 Senior Secondary (SS 1 - 3)</h3>
-            <p>Preparing students for WAEC, NECO, and university admission through specialized science, arts, and commercial tracks.</p>
-            <div class="pill-list">
-                <span class="pill">Physics</span><span class="pill">Chemistry</span>
-                <span class="pill">Biology</span><span class="pill">Economics</span>
-                <span class="pill">Government</span><span class="pill">Literature</span>
-            </div>
+        <div class="glass-card principal-card">
+            <div class="principal-img">👨‍🏫</div>
+            <h3>Dr. Adebayo Coker</h3>
+            <p style="color: #ff5fa8; font-weight: 600; margin-bottom: 1rem;">Principal</p>
+            <p>"At Grandbrook, we don't just teach subjects; we build character. Our commitment is to ensure every child reaches their highest potential."</p>
         </div>
     </div>
 
-    <div class="glass-card" style="margin-bottom: 1.5rem;">
-        <h3>📚 Core Subjects Offered</h3>
-        <p>The following subjects are graded by teachers and appear on student report cards.</p>
-        <div class="pill-list">
-            {% for sub in subjects_list %}
-            <span class="pill">{{ sub }}</span>
-            {% endfor %}
+    <!-- Academics -->
+    <div class="section-title">
+        <h2>Our Academic Programs</h2>
+        <p>We offer comprehensive tracks for both Junior and Senior Secondary students.</p>
+    </div>
+    <div class="academics-grid">
+        <div class="academic-card">
+            <div class="icon">🏫</div>
+            <h3>Junior Secondary School</h3>
+            <p>Building a strong foundation for students in JSS 1 to JSS 3 with a curriculum designed to spark curiosity and critical thinking.</p>
+            <div class="subject-list">
+                <span class="subject-pill">Basic Science</span><span class="subject-pill">Civic Education</span>
+                <span class="subject-pill">Social Studies</span><span class="subject-pill">Business Studies</span>
+                <span class="subject-pill">Computer Studies</span><span class="subject-pill">Fine Arts</span>
+            </div>
         </div>
+        <div class="academic-card">
+            <div class="icon">🎓</div>
+            <h3>Senior Secondary School</h3>
+            <p>Preparing students in SS 1 to SS 3 for WAEC, NECO, and university admission through specialized science, arts, and commercial tracks.</p>
+            <div class="subject-list">
+                <span class="subject-pill">Physics</span><span class="subject-pill">Chemistry</span>
+                <span class="subject-pill">Biology</span><span class="subject-pill">Economics</span>
+                <span class="subject-pill">Government</span><span class="subject-pill">Literature</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Values -->
+    <div class="section-title">
+        <h2>Why Choose Grandbrook</h2>
+        <p>We are committed to holistic education and excellence in every facet of learning.</p>
+    </div>
+    <div class="values-grid">
+        <div class="value-card glass-card">
+            <div class="value-icon">🎓</div>
+            <h4>Expert Educators</h4>
+            <p>Highly qualified teachers dedicated to bringing out the best in every student.</p>
+        </div>
+        <div class="value-card glass-card">
+            <div class="value-icon">🔬</div>
+            <h4>Modern Facilities</h4>
+            <p>State-of-the-art science laboratories, digital libraries, and tech centers.</p>
+        </div>
+        <div class="value-card glass-card">
+            <div class="value-icon">🏆</div>
+            <h4>Sports & Arts</h4>
+            <p>Comprehensive extracurricular programs to develop physical and creative talents.</p>
+        </div>
+        <div class="value-card glass-card">
+            <div class="value-icon">🤝</div>
+            <h4>Parent Partnership</h4>
+            <p>Keeping parents engaged in their child's academic journey through our digital portal.</p>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <h2>Ready to Check Your Results?</h2>
+        <p>Students can now access their examination results online instantly.</p>
+        <a href="{% url 'student_check' %}" class="btn btn-primary">Go to Student Portal →</a>
     </div>
 </div>
 
