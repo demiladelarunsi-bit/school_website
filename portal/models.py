@@ -12,7 +12,7 @@ class Result(models.Model):
     student_photo = models.ImageField(upload_to='student_photos/', blank=True, null=True)
     year = models.IntegerField()
     term = models.CharField(max_length=10, choices=TERM_CHOICES)
-    category = models.CharField(max_length=3, choices=CATEGORY_CHOICES, default='SSS')
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='SSS')
     track = models.CharField(max_length=20, choices=TRACK_CHOICES, default='N/A')
     class_name = models.CharField(max_length=60)
     total_marks = models.FloatField(default=0)
