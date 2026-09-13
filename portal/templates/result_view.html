@@ -1,210 +1,45 @@
 {% extends 'base.html' %}
-{% block title %}{{ result.student_name }}'s Result — Scholaris{% endblock %}
+{% block title %}Result Sheet{% endblock %}
 
 {% block styles %}
 <style>
-    .result-wrap {
-        max-width: 850px; margin: 0 auto;
-        padding: 100px 1.5rem 4rem;
-        animation: pageIn 0.7s ease both;
-    }
-    @keyframes pageIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* WAEC Certificate Style */
-    .cert-card {
-        background: rgba(20, 20, 50, 0.6); backdrop-filter: blur(30px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px; overflow: hidden; position: relative;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    }
-    
-    .cert-header {
-        text-align: center; padding: 2.5rem 2rem 2rem;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        background: linear-gradient(180deg, rgba(168, 85, 247, 0.1), transparent);
-        animation: slideDown 0.8s ease both;
-    }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-    .cert-logo {
-        width: 60px; height: 60px; margin: 0 auto 1rem;
-        background: linear-gradient(135deg, #ff5fa8, #a855f7);
-        border-radius: 50%; display: flex; align-items: center; justify-content: center;
-        font-size: 1.8rem; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
-        animation: pulseLogo 3s infinite ease-in-out;
-    }
-    @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    .cert-header h1 {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.6rem; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.05em; margin-bottom: 0.3rem;
-        background: linear-gradient(135deg, #fff, #a855f7);
-        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .cert-header h2 {
-        font-size: 0.9rem; color: #a0a0c0; font-weight: 500;
-        text-transform: uppercase; letter-spacing: 0.2em;
-    }
-    
-    .cert-info {
-        display: grid; grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem; padding: 2rem 2.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .info-item { display: flex; flex-direction: column; }
-    .info-item .label {
-        font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
-        color: #8080a0; margin-bottom: 0.3rem;
-    }
-    .info-item .value {
-        font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem;
-        font-weight: 600; color: #fff;
-        animation: slideRight 0.6s ease both;
-    }
-    @keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-    
-    .cert-summary-box {
-        padding: 1.5rem 2.5rem; display: flex; align-items: center;
-        gap: 2rem; justify-content: space-between;
-        background: rgba(255, 255, 255, 0.02);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        flex-wrap: wrap;
-    }
+    .result-wrap { max-width: 850px; margin: 0 auto; padding: 100px 1.5rem 4rem; animation: pageIn 0.7s ease both; }
+    .cert-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05); }
+    .cert-header { text-align: center; padding: 2.5rem 2rem 2rem; border-bottom: 3px solid #1b5e20; background: linear-gradient(180deg, #e8f5e9, transparent); }
+    .cert-logo { width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #1b5e20, #43a047); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(27, 94, 32, 0.2); color: #fff; }
+    .cert-header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #1b5e20; }
+    .cert-header h2 { font-size: 0.9rem; color: #43a047; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; }
+    .cert-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: 2rem 2.5rem; border-bottom: 1px solid #e8f5e9; }
+    .info-item .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #43a047; margin-bottom: 0.3rem; }
+    .info-item .value { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; color: #1b5e20; }
+    .cert-summary-box { padding: 1.5rem 2.5rem; display: flex; align-items: center; gap: 2rem; justify-content: space-between; background: #f9fcf9; border-bottom: 1px solid #e8f5e9; flex-wrap: wrap; }
     .summary-stats { display: flex; gap: 2.5rem; }
-    .summary-stat .label { font-size: 0.75rem; color: #8080a0; text-transform: uppercase; letter-spacing: 0.1em; }
-    .summary-stat .value {
-        font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem;
-        font-weight: 700; color: #fff; line-height: 1;
-    }
-    
-    .grade-circle {
-        width: 100px; height: 100px; border-radius: 50%;
-        background: conic-gradient(var(--grade-color, #4ade80) calc(var(--grade-percent, 100) * 1%), rgba(255, 255, 255, 0.06) 0);
-        display: flex; align-items: center; justify-content: center;
-        position: relative; flex-shrink: 0;
-        animation: gradeIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
-    }
-    @keyframes gradeIn { from { opacity: 0; transform: scale(0.5) rotate(-180deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
-    .grade-circle::before {
-        content: ''; position: absolute; inset: 6px;
-        border-radius: 50%; background: rgba(20, 20, 50, 0.95);
-    }
+    .summary-stat .label { font-size: 0.75rem; color: #43a047; text-transform: uppercase; letter-spacing: 0.1em; }
+    .summary-stat .value { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: #1b5e20; line-height: 1; }
+    .grade-circle { width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(var(--grade-color, #43a047) calc(var(--grade-percent, 100) * 1%), #e0e0e0 0); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+    .grade-circle::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: #fff; }
     .grade-circle .grade-inner { position: relative; text-align: center; z-index: 1; }
-    .grade-circle .grade-letter {
-        font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem;
-        font-weight: 700; color: var(--grade-color, #4ade80); line-height: 1;
-    }
-    .grade-circle .grade-label { font-size: 0.6rem; color: #a0a0c0; text-transform: uppercase; letter-spacing: 0.1em; }
-
-    /* WAEC Subjects Table */
+    .grade-circle .grade-letter { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--grade-color, #43a047); line-height: 1; }
     .cert-body { padding: 2rem 2.5rem; }
-    .table-title {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.1rem; margin-bottom: 1.5rem;
-        color: #fff; display: flex; align-items: center; gap: 0.5rem;
-    }
-    .table-title::before {
-        content: ''; width: 30px; height: 2px;
-        background: linear-gradient(135deg, #ff5fa8, #a855f7); border-radius: 2px;
-    }
-    
     .waec-table { width: 100%; border-collapse: collapse; }
-    .waec-table thead th {
-        text-align: left; padding: 0.8rem 1rem;
-        color: #c8c8e0; font-weight: 600; font-size: 0.8rem;
-        text-transform: uppercase; letter-spacing: 0.05em;
-        background: rgba(255, 255, 255, 0.04);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    }
-    .waec-table tbody tr {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        animation: slideUp 0.4s ease both;
-        transition: background 0.2s ease;
-    }
-    .waec-table tbody tr:hover { background: rgba(255, 95, 168, 0.05); }
-    .waec-table tbody tr:nth-child(1) { animation-delay: 0.5s; }
-    .waec-table tbody tr:nth-child(2) { animation-delay: 0.55s; }
-    .waec-table tbody tr:nth-child(3) { animation-delay: 0.6s; }
-    .waec-table tbody tr:nth-child(4) { animation-delay: 0.65s; }
-    .waec-table tbody tr:nth-child(5) { animation-delay: 0.7s; }
-    .waec-table tbody tr:nth-child(6) { animation-delay: 0.75s; }
-    .waec-table tbody tr:nth-child(7) { animation-delay: 0.8s; }
-    .waec-table tbody tr:nth-child(8) { animation-delay: 0.85s; }
-    .waec-table tbody tr:nth-child(9) { animation-delay: 0.9s; }
-    .waec-table tbody tr:nth-child(10) { animation-delay: 0.95s; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .waec-table td { padding: 1rem; color: #e8e8f0; font-size: 0.95rem; }
-    .waec-table td.sn { color: #8080a0; font-weight: 600; width: 50px; }
-    .waec-table td.subject { font-weight: 500; color: #fff; }
-    .waec-table td.marks {
-        font-family: 'Space Grotesk', sans-serif; font-weight: 600;
-        text-align: right; width: 100px;
-    }
-    
-    .subject-grade {
-        display: inline-block; text-align: center; padding: 4px 12px;
-        border-radius: 6px; font-weight: 600; font-size: 0.85rem;
-        min-width: 40px;
-    }
-    .subject-grade[data-grade="A+"], .subject-grade[data-grade="A"] { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
-    .subject-grade[data-grade="B+"], .subject-grade[data-grade="B"] { background: rgba(95, 168, 255, 0.15); color: #5fa8ff; }
-    .subject-grade[data-grade="C+"], .subject-grade[data-grade="C"] { background: rgba(255, 220, 100, 0.15); color: #ffdc64; }
-    .subject-grade[data-grade="D"] { background: rgba(255, 150, 100, 0.15); color: #ff9664; }
-    .subject-grade[data-grade="F"] { background: rgba(248, 113, 113, 0.15); color: #f87171; }
-
-    .remarks-box {
-        margin-top: 2rem; padding: 1.2rem 1.5rem;
-        background: rgba(255, 255, 255, 0.03);
-        border-left: 4px solid #ff5fa8; border-radius: 8px;
-        font-size: 0.9rem; color: #c8c8e0; font-style: italic;
-    }
-    .remarks-box strong { display: block; margin-bottom: 0.3rem; color: #fff; font-style: normal; }
-
-    .grade-key {
-        margin-top: 2rem; padding-top: 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;
-    }
-    .key-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #a0a0c0; }
-    .key-item span { font-weight: 600; color: #fff; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.1); }
-
-    .actions-row {
-        padding: 1.5rem 2.5rem 2.5rem;
-        display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    }
-    .btn {
-        padding: 0.9rem 2rem; border-radius: 100px;
-        font-weight: 600; font-size: 0.95rem; text-decoration: none;
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        transition: all 0.3s ease; cursor: pointer; border: none;
-        font-family: 'Inter', sans-serif;
-    }
-    .btn-primary {
-        background: linear-gradient(135deg, #ff5fa8, #a855f7); color: #fff;
-        box-shadow: 0 8px 25px rgba(255, 95, 168, 0.35);
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 95, 168, 0.5); }
-    .btn-ghost {
-        background: rgba(255, 255, 255, 0.06); color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-    .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
-    
-    .confetti {
-        position: fixed; width: 12px; height: 12px;
-        pointer-events: none; z-index: 9999;
-        animation: confettiFall 3s linear forwards;
-    }
-    @keyframes confettiFall {
-        0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
-    @media (max-width: 600px) {
-        .cert-info { grid-template-columns: 1fr; }
-        .cert-summary-box { flex-direction: column; text-align: center; }
-        .cert-body { padding: 1.5rem; overflow-x: auto; }
-        .waec-table { min-width: 400px; }
-    }
+    .waec-table thead th { text-align: left; padding: 0.8rem 1rem; color: #1b5e20; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; background: #e8f5e9; border-bottom: 2px solid #c8e6c9; }
+    .waec-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.2s ease; }
+    .waec-table tbody tr:hover { background: #f9fff9; }
+    .waec-table td { padding: 1rem; color: #333; font-size: 0.95rem; }
+    .subject-grade { display: inline-block; text-align: center; padding: 4px 12px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; min-width: 40px; }
+    .subject-grade[data-grade="A+"], .subject-grade[data-grade="A"] { background: #e8f5e9; color: #1b5e20; }
+    .subject-grade[data-grade="B+"], .subject-grade[data-grade="B"] { background: #e3f2fd; color: #1565c0; }
+    .subject-grade[data-grade="C+"], .subject-grade[data-grade="C"] { background: #fff8e1; color: #f57f17; }
+    .subject-grade[data-grade="D"] { background: #fff3e0; color: #e65100; }
+    .subject-grade[data-grade="F"] { background: #ffebee; color: #c62828; }
+    .actions-row { padding: 1.5rem 2.5rem 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 0.9rem 2rem; border-radius: 100px; font-weight: 600; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+    .btn-primary { background: linear-gradient(135deg, #1b5e20, #43a047); color: #fff; box-shadow: 0 8px 25px rgba(27, 94, 32, 0.2); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(27, 94, 32, 0.3); }
+    .btn-ghost { background: #fff; color: #1b5e20; border: 1px solid #1b5e20; }
+    .btn-ghost:hover { background: #e8f5e9; }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) { .cert-info { grid-template-columns: 1fr; } .cert-body { padding: 1.5rem; overflow-x: auto; } .waec-table { min-width: 400px; } }
 </style>
 {% endblock %}
 
@@ -213,136 +48,49 @@
     <div class="cert-card">
         <div class="cert-header">
             <div class="cert-logo">◈</div>
-            <h1>Scholaris Academy</h1>
-            <h2>Senior School Certificate Examination</h2>
+            <h1>Grandbrook Secondary School</h1>
+            <h2>{{ result.category }} Examination Result</h2>
         </div>
-
         <div class="cert-info">
-            <div class="info-item">
-                <span class="label">Candidate Name</span>
-                <span class="value">{{ result.student_name }}</span>
-            </div>
-            <div class="info-item">
-                <span class="label">Examination Number</span>
-                <span class="value">{{ result.exam_number }}</span>
-            </div>
-            <div class="info-item">
-                <span class="label">Class</span>
-                <span class="value">{{ result.class_name }}</span>
-            </div>
-            <div class="info-item">
-                <span class="label">Examination Year</span>
-                <span class="value">{{ result.year }} ({{ result.term }})</span>
-            </div>
+            <div class="info-item"><span class="label">Candidate Name</span><span class="value">{{ result.student_name }}</span></div>
+            <div class="info-item"><span class="label">Examination Number</span><span class="value">{{ result.exam_number }}</span></div>
+            <div class="info-item"><span class="label">Class</span><span class="value">{{ result.class_name }}</span></div>
+            <div class="info-item"><span class="label">Examination Year</span><span class="value">{{ result.year }} ({{ result.term }})</span></div>
         </div>
-
         <div class="cert-summary-box">
             <div class="summary-stats">
-                <div class="summary-stat">
-                    <div class="label">Total Marks</div>
-                    <div class="value">{{ result.total_marks }}</div>
-                </div>
-                <div class="summary-stat">
-                    <div class="label">Average</div>
-                    <div class="value">{{ result.average_mark }}</div>
-                </div>
-                <div class="summary-stat">
-                    <div class="label">Subjects</div>
-                    <div class="value">{{ result.subjects.count }}</div>
-                </div>
+                <div class="summary-stat"><div class="label">Total Marks</div><div class="value">{{ result.total_marks }}</div></div>
+                <div class="summary-stat"><div class="label">Average</div><div class="value">{{ result.average_mark }}</div></div>
             </div>
-            <div class="grade-circle" id="gradeCircle">
+            <div class="grade-circle">
                 <div class="grade-inner">
-                    <div class="grade-letter">{{ result.grade }}</div>
+                    <div class="grade-letter" style="color: var(--grade-color, #43a047)">{{ result.grade }}</div>
                     <div class="grade-label">Grade</div>
                 </div>
             </div>
         </div>
-
         <div class="cert-body">
-            <div class="table-title">Subject Breakdown</div>
             <table class="waec-table">
                 <thead>
-                    <tr>
-                        <th width="50">S/N</th>
-                        <th>Subject</th>
-                        <th style="text-align: right;">Marks</th>
-                        <th style="text-align: center;">Grade</th>
-                    </tr>
+                    <tr><th width="50">S/N</th><th>Subject</th><th style="text-align: right;">Marks</th><th style="text-align: center;">Grade</th></tr>
                 </thead>
                 <tbody>
                     {% for subject in result.subjects.all %}
                     <tr>
-                        <td class="sn">{{ forloop.counter }}</td>
-                        <td class="subject">{{ subject.subject_name }}</td>
-                        <td class="marks">{{ subject.marks }}</td>
-                        <td style="text-align: center;">
-                            <span class="subject-grade" data-grade="{{ subject.grade }}">{{ subject.grade }}</span>
-                        </td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ subject.subject_name }}</td>
+                        <td style="text-align: right;">{{ subject.marks }}</td>
+                        <td style="text-align: center;"><span class="subject-grade" data-grade="{{ subject.grade }}">{{ subject.grade }}</span></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-
-            {% if result.remarks %}
-            <div class="remarks-box">
-                <strong> Examiner's Remarks:</strong>
-                "{{ result.remarks }}"
-            </div>
-            {% endif %}
-
-            <div class="grade-key">
-                <div class="key-item"><span>A+</span> 90-100 (Distinction)</div>
-                <div class="key-item"><span>A</span> 80-89 (Excellent)</div>
-                <div class="key-item"><span>B+</span> 70-79 (Very Good)</div>
-                <div class="key-item"><span>B</span> 60-69 (Good)</div>
-                <div class="key-item"><span>C+</span> 50-59 (Credit)</div>
-                <div class="key-item"><span>C</span> 40-49 (Pass)</div>
-                <div class="key-item"><span>F</span> Below 40 (Fail)</div>
-            </div>
+            {% if result.remarks %}<p style="margin-top: 1.5rem; color: #333; font-style: italic; border-left: 3px solid #43a047; padding-left: 1rem;">"{{ result.remarks }}"</p>{% endif %}
         </div>
-
         <div class="actions-row">
             <a href="{% url 'student_check' %}" class="btn btn-ghost">Check Another</a>
-            <button onclick="window.print()" class="btn btn-primary">🖨 Print Certificate</button>
+            <button onclick="window.print()" class="btn btn-primary">🖨 Print Result</button>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-const grade = '{{ result.grade }}';
-const gradeMap = {
-    'A+': { color: '#4ade80', percent: 95 },
-    'A':  { color: '#4ade80', percent: 85 },
-    'B+': { color: '#5fa8ff', percent: 75 },
-    'B':  { color: '#5fa8ff', percent: 65 },
-    'C+': { color: '#ffdc64', percent: 55 },
-    'C':  { color: '#ffdc64', percent: 45 },
-    'D':  { color: '#ff9664', percent: 35 },
-    'F':  { color: '#f87171', percent: 25 },
-};
-const gd = gradeMap[grade] || { color: '#a855f7', percent: 50 };
-document.documentElement.style.setProperty('--grade-color', gd.color);
-document.documentElement.style.setProperty('--grade-percent', gd.percent);
-
-if (['A+', 'A', 'B+'].includes(grade)) {
-    setTimeout(fireConfetti, 800);
-}
-function fireConfetti() {
-    const colors = ['#ff5fa8', '#a855f7', '#5fa8ff', '#4ade80', '#ffdc64'];
-    for (let i = 0; i < 80; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = Math.random() * 100 + 'vw';
-        c.style.background = colors[Math.floor(Math.random() * colors.length)];
-        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        c.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        c.style.animationDelay = (Math.random() * 0.5) + 's';
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 4000);
-    }
-}
-</script>
 {% endblock %}
