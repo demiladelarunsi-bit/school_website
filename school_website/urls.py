@@ -28,15 +28,16 @@ from portal import views
 from django.contrib import admin
 from django.urls import path, include
 
-from django.urls import path
-from portal import views
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('teacher/login/', views.teacher_login, name='teacher_login'),
-    path('teacher/logout/', views.teacher_logout, name='teacher_logout'),
-    path('teacher/dashboard/', views.teacher_dashboard, name='teacher_dashboard'),
-    path('teacher/upload/', views.upload_result, name='upload_result'),
-    path('teacher/delete/<int:pk>/', views.delete_result, name='delete_result'),
-    path('student/check/', views.student_check, name='student_check'),
+    path('admin/', admin.site.urls),
+    path('', include('portal.urls')),
 ]
+
+# Serve media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

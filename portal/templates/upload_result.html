@@ -17,38 +17,26 @@
     .form-field label { color: #1b5e20; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.5rem; }
     .form-field input, .form-field select, .form-field textarea { padding: 0.8rem 1rem; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 10px; color: #333; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.3s ease; width: 100%; }
     .form-field input:focus, .form-field select:focus, .form-field textarea:focus { outline: none; border-color: #43a047; background: #fff; box-shadow: 0 0 0 4px rgba(67, 160, 71, 0.15); }
-    .form-field select option { background: #fff; color: #333; }
     
-    .spreadsheet-wrap { background: #f9fcf9; border: 1px solid #e0e0e0; border-radius: 12px; overflow: auto; max-height: 450px; -webkit-overflow-scrolling: touch; }
+    .spreadsheet-wrap { background: #f9fcf9; border: 1px solid #e0e0e0; border-radius: 12px; overflow: auto; max-height: 450px; }
     .data-table { width: 100%; border-collapse: collapse; min-width: 400px; }
     .data-table thead { position: sticky; top: 0; z-index: 10; }
     .data-table thead th { text-align: center; padding: 0.8rem 0.5rem; color: #1b5e20; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; background: #e8f5e9; border-bottom: 1px solid #c8e6c9; }
     .data-table thead th:first-child { text-align: left; }
-    .data-table tbody tr { border-bottom: 1px solid #f0f0f0; animation: rowIn 0.4s ease both; }
-    .data-table tbody tr:nth-child(even) { background: #f9fff9; }
-    .data-table td { padding: 0.4rem 0.5rem; vertical-align: middle; color: #333; font-size: 0.85rem; font-weight: 500; white-space: nowrap; }
+    .data-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+    .data-table td { padding: 0.4rem 0.5rem; vertical-align: middle; color: #333; font-size: 0.85rem; white-space: nowrap; }
     .data-table td.subject-name { text-align: left; color: #1b5e20; }
-    .table-input { width: 60px; padding: 0.5rem 0.2rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; color: #333; text-align: center; font-family: 'Inter', sans-serif; transition: all 0.2s ease; font-size: 0.85rem; }
-    .table-input:focus { outline: none; border-color: #43a047; box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15); }
+    .table-input { width: 60px; padding: 0.5rem 0.2rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; color: #333; text-align: center; font-size: 0.85rem; }
+    .table-input:focus { outline: none; border-color: #43a047; }
     .total-display { width: 60px; text-align: center; font-weight: 700; color: #1b5e20; font-size: 0.85rem; }
     
     .submit-row { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e8f5e9; flex-wrap: wrap; }
     .btn { padding: 0.9rem 2rem; border-radius: 100px; font-weight: 600; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
     .btn-primary { background: linear-gradient(135deg, #1b5e20, #43a047); color: #fff; box-shadow: 0 8px 25px rgba(27, 94, 32, 0.2); }
-    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 35px rgba(27, 94, 32, 0.3); }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); }
     .btn-ghost { background: #fff; color: #1b5e20; border: 1px solid #1b5e20; }
-    .btn-ghost:hover { background: #e8f5e9; }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes cardIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes rowIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
     
-    @media (max-width: 600px) {
-        .upload-wrap { padding: 90px  0.5rem 2rem; }
-        .upload-card { padding: 1rem; }
-        .form-grid { grid-template-columns: 1fr; gap: 1rem; }
-        .submit-row { justify-content: center; }
-        .btn { width: 100%; justify-content: center; }
-    }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .submit-row { justify-content: center; } .btn { width: 100%; justify-content: center; } }
 </style>
 {% endblock %}
 
@@ -56,18 +44,20 @@
 <div class="upload-wrap">
     <div class="upload-header">
         <h1>Upload Student Result</h1>
-        <p>Enter CA (out of 40) and Exam (out of 60). The total will auto-calculate to 100.</p>
+        <p>Select JSS or SSS. If SSS, choose the track. Upload a photo of the student.</p>
     </div>
-    <form method="post" class="upload-card">
+    <form method="post" enctype="multipart/form-data" class="upload-card">
         {% csrf_token %}
         <div class="section-label">Student Information</div>
         <div class="form-grid">
             <div class="form-field"><label>Exam Number</label>{{ form.exam_number }}</div>
             <div class="form-field"><label>Student Name</label>{{ form.student_name }}</div>
-            <div class="form-field"><label>Category</label>{{ form.category }}</div>
+            <div class="form-field"><label>Category (JSS / SSS)</label>{{ form.category }}</div>
+            <div class="form-field" id="track-field"><label>Track (Science/Art/Comm.)</label>{{ form.track }}</div>
             <div class="form-field"><label>Class Name</label>{{ form.class_name }}</div>
             <div class="form-field"><label>Year</label>{{ form.year }}</div>
             <div class="form-field"><label>Term</label>{{ form.term }}</div>
+            <div class="form-field"><label>Student Photo (Passport)</label>{{ form.student_photo }}</div>
             <div class="form-field full"><label>Remarks</label>{{ form.remarks }}</div>
         </div>
 
@@ -75,26 +65,14 @@
         <div class="spreadsheet-wrap">
             <table class="data-table">
                 <thead>
-                    <tr>
-                        <th>Subject Name</th>
-                        <th>CA (/40)</th>
-                        <th>Exam (/60)</th>
-                        <th>Total (/100)</th>
-                    </tr>
+                    <tr><th>Subject Name</th><th>CA (/40)</th><th>Exam (/60)</th><th>Total (/100)</th></tr>
                 </thead>
                 <tbody>
                     {% for subject in subjects %}
                     <tr>
-                        <td class="subject-name">
-                            {{ subject }}
-                            <input type="hidden" name="subject_name[]" value="{{ subject }}">
-                        </td>
-                        <td style="text-align: center;">
-                            <input type="number" name="subject_ca[]" min="0" max="40" step="0.1" class="table-input ca-input" placeholder="0" oninput="calculateTotal(this)">
-                        </td>
-                        <td style="text-align: center;">
-                            <input type="number" name="subject_exam[]" min="0" max="60" step="0.1" class="table-input exam-input" placeholder="0" oninput="calculateTotal(this)">
-                        </td>
+                        <td class="subject-name">{{ subject }}<input type="hidden" name="subject_name[]" value="{{ subject }}"></td>
+                        <td style="text-align: center;"><input type="number" name="subject_ca[]" min="0" max="40" step="0.1" class="table-input ca-input" placeholder="0" oninput="calculateTotal(this)"></td>
+                        <td style="text-align: center;"><input type="number" name="subject_exam[]" min="0" max="60" step="0.1" class="table-input exam-input" placeholder="0" oninput="calculateTotal(this)"></td>
                         <td class="total-display">0</td>
                     </tr>
                     {% endfor %}
@@ -110,20 +88,28 @@
 </div>
 
 <script>
+function toggleTrack() {
+    const category = document.getElementById('id_category').value;
+    const trackField = document.getElementById('track-field');
+    if (category === 'JSS') {
+        trackField.style.display = 'none';
+        document.getElementById('id_track').value = 'N/A';
+    } else {
+        trackField.style.display = 'flex';
+    }
+}
+window.onload = toggleTrack; // Run on page load
+
 function calculateTotal(input) {
     const row = input.closest('tr');
     const caInput = row.querySelector('.ca-input');
     const examInput = row.querySelector('.exam-input');
     const totalDisplay = row.querySelector('.total-display');
-    
     let ca = parseFloat(caInput.value) || 0;
     let exam = parseFloat(examInput.value) || 0;
-    
     if (ca > 40) { caInput.value = 40; ca = 40; }
     if (exam > 60) { examInput.value = 60; exam = 60; }
-    
-    let total = ca + exam;
-    totalDisplay.textContent = total.toFixed(1);
+    totalDisplay.textContent = (ca + exam).toFixed(1);
 }
 </script>
 {% endblock %}

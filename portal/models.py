@@ -1,24 +1,19 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
-from django.contrib.auth.models import User
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-
-from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Result(models.Model):
     TERM_CHOICES = [('First', 'First Term'), ('Second', 'Second Term'), ('Third', 'Third Term')]
     GRADE_CHOICES = [('A+', 'A+'), ('A', 'A'), ('B+', 'B+'), ('B', 'B'), ('C+', 'C+'), ('C', 'C'), ('D', 'D'), ('F', 'F')]
-    CATEGORY_CHOICES = [('Junior', 'Junior Secondary'), ('Senior', 'Senior Secondary')]
+    CATEGORY_CHOICES = [('JSS', 'Junior Secondary'), ('SSS', 'Senior Secondary')]
+    TRACK_CHOICES = [('Science', 'Science'), ('Art', 'Art'), ('Commercial', 'Commercial'), ('N/A', 'Not Applicable')]
 
     exam_number = models.CharField(max_length=20)
     student_name = models.CharField(max_length=120)
+    student_photo = models.ImageField(upload_to='student_photos/', blank=True, null=True)
     year = models.IntegerField()
     term = models.CharField(max_length=10, choices=TERM_CHOICES)
-    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='Senior')
+    category = models.CharField(max_length=3, choices=CATEGORY_CHOICES, default='SSS')
+    track = models.CharField(max_length=20, choices=TRACK_CHOICES, default='N/A')
     class_name = models.CharField(max_length=60)
     total_marks = models.FloatField(default=0)
     average_mark = models.FloatField(default=0)
